@@ -25,34 +25,7 @@ namespace OledTest2
             device.DrawString(2, 32, "nanoFramework", 1, true); //centered text
             device.Display();
 
-            // Thread.Sleep(-1);
 
-            // // instantiation example
-            // var ssd1306 = new Ssd1306(
-            //     I2cDevice.Create(
-            //         new I2cConnectionSettings(
-            //             1,
-            //             Ssd1306.DefaultI2cAddress,
-            //             I2cBusSpeed.StandardMode)),
-            //     Ssd13xx.DisplayResolution.OLED128x64);
-            //
-            // ssd1306.SendCommand(new SetDisplayOn());
-            // ssd1306.ClearScreen();
-            // // ssd1306.Font = ssd1306
-            // // ssd1306.DrawString(2, 2, "nF IOT!", 2); //large size 2 font
-            // // ssd1306.DrawString(2, 32, "nanoFramework", 1, true); //centered text
-            //
-            // ssd1306.DrawHorizontalLine(10, 10, 100);
-            //
-            // ssd1306.Display();
-
-            Debug.WriteLine("Done");
-
-            Thread.Sleep(Timeout.Infinite);
-
-            // Browse our samples repository: https://github.com/nanoframework/samples
-            // Check our documentation online: https://docs.nanoframework.net/
-            // Join our lively Discord community: https://discord.gg/gCyBu8T
         }
     }
 
@@ -64,7 +37,7 @@ namespace OledTest2
         /// <summary>
         /// The font definition.
         /// </summary>
-        private static readonly byte[][] _fontTable =
+        private static readonly byte[][] FontTable =
         {
             new byte [] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},   // U+0020 (space)
             new byte [] { 0x18, 0x3C, 0x3C, 0x18, 0x18, 0x00, 0x18, 0x00},   // U+0021 (!)
@@ -190,11 +163,11 @@ namespace OledTest2
                 var index = (byte)character;
                 if (index is < 32 or > 127)
                 {
-                    return _fontTable[0x20];
+                    return FontTable[0x20];
                 }
                 else
                 {
-                    return _fontTable[index - 0x20];
+                    return FontTable[index - 0x20];
                 }
             }
         }
