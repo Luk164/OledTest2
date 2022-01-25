@@ -16,39 +16,34 @@ namespace OledTest2
             Configuration.SetPinFunction(21, DeviceFunction.I2C1_DATA);
             Configuration.SetPinFunction(22, DeviceFunction.I2C1_CLOCK);
 
-            using Ssd1306 device =
+            using Ssd1306 display =
                 new Ssd1306(I2cDevice.Create(new I2cConnectionSettings(1, Ssd1306.DefaultI2cAddress)),
                     Ssd13xx.DisplayResolution.OLED128x64);
-            device.ClearScreen();
-            device.Font = new BasicFont();
-            device.DrawString(2, 2, "nF IOT!", 2); //large size 2 font
-            device.DrawString(2, 32, "nanoFramework", 1, true); //centered text
-            device.Display();
-
-            // Thread.Sleep(-1);
-
-            // // instantiation example
-            // var ssd1306 = new Ssd1306(
-            //     I2cDevice.Create(
-            //         new I2cConnectionSettings(
-            //             1,
-            //             Ssd1306.DefaultI2cAddress,
-            //             I2cBusSpeed.StandardMode)),
-            //     Ssd13xx.DisplayResolution.OLED128x64);
-            //
-            // ssd1306.SendCommand(new SetDisplayOn());
-            // ssd1306.ClearScreen();
-            // // ssd1306.Font = ssd1306
-            // // ssd1306.DrawString(2, 2, "nF IOT!", 2); //large size 2 font
-            // // ssd1306.DrawString(2, 32, "nanoFramework", 1, true); //centered text
-            //
-            // ssd1306.DrawHorizontalLine(10, 10, 100);
-            //
-            // ssd1306.Display();
+            display.ClearScreen();
+            display.Font = new BasicFont();
+            display.DrawString(2, 2, "nF IOT!", 2); //large size 2 font
+            display.DrawString(2, 32, "nanoFramework", 1, true); //centered text
+            display.Display();
 
             Debug.WriteLine("Done");
 
-            Thread.Sleep(Timeout.Infinite);
+            var sensor = new AM2320();
+            sensor.Initialize(new I2cConnectionSettings(2, AM2320.AM2320Addr));
+
+            Thread.Sleep(3000);
+            var i = 0;
+            while (true)
+            {
+                var test = sensor.Read();
+                display.ClearScreen();
+                display.DrawString(2, 2, $"Temp: {test.Temperature}");
+                display.Display();
+                Debug.WriteLine($"Reading {i}... temp: {test.Temperature} hum: {test.Humidity}");
+                Thread.Sleep(4000);
+                i++;
+            }
+
+            // Thread.Sleep(Timeout.Infinite);
 
             // Browse our samples repository: https://github.com/nanoframework/samples
             // Check our documentation online: https://docs.nanoframework.net/
