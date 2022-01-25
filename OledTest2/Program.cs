@@ -16,7 +16,7 @@ namespace OledTest2
             Configuration.SetPinFunction(21, DeviceFunction.I2C1_DATA);
             Configuration.SetPinFunction(22, DeviceFunction.I2C1_CLOCK);
 
-            using Ssd1306 display =
+            using var display =
                 new Ssd1306(I2cDevice.Create(new I2cConnectionSettings(1, Ssd1306.DefaultI2cAddress)),
                     Ssd13xx.DisplayResolution.OLED128x64);
             display.ClearScreen();
@@ -29,6 +29,8 @@ namespace OledTest2
 
             var sensor = new AM2320();
             sensor.Initialize(new I2cConnectionSettings(2, AM2320.AM2320Addr));
+
+            
 
             Thread.Sleep(3000);
             var i = 0;

@@ -27,12 +27,13 @@ namespace OledTest2
 
         public AM2320Data Read()
         {
-            var readBuf = new byte[4];
+            var readBuf = new byte[8];
 
-            _sensor.WriteRead(new byte[] { 0x03, 0x00, 0x04 }, readBuf);
+            _sensor.Write(new byte[] { 0x03, 0x00, 0x04 });
+            _sensor.Read(readBuf);
 
-            double rawH = BitConverter.ToInt16(readBuf, 0);
-            double rawT = BitConverter.ToInt16(readBuf, 2);
+            double rawH = BitConverter.ToInt16(readBuf, 2);
+            double rawT = BitConverter.ToInt16(readBuf, 4);
 
             var data = new AM2320Data
             {
