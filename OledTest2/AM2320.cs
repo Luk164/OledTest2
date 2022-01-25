@@ -31,19 +31,30 @@ namespace OledTest2
         {
             var readBuf = new byte[8];
 
+            //Ping required to wake up the sensor
+            _sensor.WriteByte(0);
+            Thread.Sleep(10);
             var test = _sensor.WriteByte(0);
             Thread.Sleep(10);
 
             var writeResult = _sensor.Write(new byte[] { 0x03, 0x00, 0x04 });
-            Thread.Sleep(300);
+            Thread.Sleep(20);
             var readResult = _sensor.Read(readBuf);
+
+            foreach (var b in readBuf)
+            {
+                if (b != 0)
+                {
+                    Debug.WriteLine("### WORKS ###");
+                }
+            }
 
             double rawH = BitConverter.ToInt16(readBuf, 2);
             double rawT = BitConverter.ToInt16(readBuf, 4);
 
+            Debug.WriteLine($"Ping result: {test.Status}");
             Debug.WriteLine($"Write: {writeResult.Status}");
             Debug.WriteLine($"Read: {readResult.Status}");
-            Debug.WriteLine($"Ping result: {readResult.Status}");
 
             var data = new AM2320Data
             {
