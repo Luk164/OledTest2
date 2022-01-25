@@ -16,17 +16,17 @@ namespace OledTest2
             Configuration.SetPinFunction(21, DeviceFunction.I2C1_DATA);
             Configuration.SetPinFunction(22, DeviceFunction.I2C1_CLOCK);
 
-            var testDev = I2cDevice.Create(new I2cConnectionSettings(1, 0x5C));
-            var writeRes = testDev.WriteByte(0);
-
-            while (writeRes.Status != I2cTransferStatus.FullTransfer)
-            {
-                Debug.Write($"\rFailure to communicate. Code: {writeRes.Status}");
-                writeRes = testDev.WriteByte(0);
-                Thread.Sleep(100);
-            }
-
-            Debug.WriteLine("Success!");
+            // var testDev = I2cDevice.Create(new I2cConnectionSettings(1, 0x5C));
+            // var writeRes = testDev.WriteByte(0);
+            //
+            // while (writeRes.Status != I2cTransferStatus.FullTransfer)
+            // {
+            //     Debug.Write($"\rFailure to communicate. Code: {writeRes.Status}");
+            //     writeRes = testDev.WriteByte(0);
+            //     Thread.Sleep(100);
+            // }
+            //
+            // Debug.WriteLine("Success!");
 
             // Configuration.SetPinFunction(25, DeviceFunction.I2C2_DATA);
             // Configuration.SetPinFunction(26, DeviceFunction.I2C2_CLOCK);

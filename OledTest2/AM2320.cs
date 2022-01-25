@@ -22,7 +22,7 @@ namespace OledTest2
         /// </summary>
         public void Initialize(I2cConnectionSettings settings)
         {
-            settings ??= new I2cConnectionSettings(1, AM2320Addr);
+            settings ??= new I2cConnectionSettings(1, AM2320Addr, I2cBusSpeed.StandardMode);
 
             _sensor = I2cDevice.Create(settings);
         }
@@ -38,7 +38,7 @@ namespace OledTest2
             Thread.Sleep(10);
 
             var writeResult = _sensor.Write(new byte[] { 0x03, 0x00, 0x04 });
-            Thread.Sleep(20);
+            Thread.Sleep(2);
             var readResult = _sensor.Read(readBuf);
 
             foreach (var b in readBuf)
