@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Device.I2c;
+using System.Diagnostics;
+using System.Threading;
 
 namespace OledTest2
 {
@@ -29,11 +31,15 @@ namespace OledTest2
         {
             var readBuf = new byte[8];
 
-            _sensor.Write(new byte[] { 0x03, 0x00, 0x04 });
-            _sensor.Read(readBuf);
+            var test1= _sensor.Write(new byte[] { 0x03, 0x00, 0x04 });
+            var test2 = _sensor.Read(readBuf);
 
             double rawH = BitConverter.ToInt16(readBuf, 2);
+            Thread.Sleep(300);
             double rawT = BitConverter.ToInt16(readBuf, 4);
+
+            Debug.WriteLine($"Write: {test1.Status}");
+            Debug.WriteLine($"Read: {test2.Status}");
 
             var data = new AM2320Data
             {
