@@ -27,7 +27,7 @@ namespace OledTest2
             _sensor = I2cDevice.Create(settings);
         }
 
-        public AM2320Data Read()
+        public AM2320Data ReadTempHum()
         {
             var readBuf = new byte[8];
 
@@ -41,14 +41,12 @@ namespace OledTest2
             Thread.Sleep(2);
             var readResult = _sensor.Read(readBuf);
 
-            // double rawH = BitConverter.ToInt16(readBuf, 2);
             double rawH = (readBuf[2] << 8) + readBuf[3];
-            // double rawT = BitConverter.ToInt16(readBuf, 4);
             double rawT = (readBuf[4] << 8) + readBuf[5];
 
             // Debug.WriteLine($"Ping result: {test.Status}");
             // Debug.WriteLine($"Write: {writeResult.Status}");
-            // Debug.WriteLine($"Read: {readResult.Status}");
+            // Debug.WriteLine($"ReadTempHum: {readResult.Status}");
 
             var data = new AM2320Data
             {
@@ -64,8 +62,6 @@ namespace OledTest2
             var readBuf = new byte[6];
 
             //Ping required to wake up the sensor
-            // _sensor.WriteByte(0);
-            // Thread.Sleep(10);
             var test = _sensor.WriteByte(0);
             Thread.Sleep(10);
 
@@ -76,7 +72,7 @@ namespace OledTest2
 
             // Debug.WriteLine($"Ping result: {test.Status}");
             // Debug.WriteLine($"Write: {writeResult.Status}");
-            // Debug.WriteLine($"Read: {readResult.Status}");
+            // Debug.WriteLine($"ReadTempHum: {readResult.Status}");
 
             return temp;
         }

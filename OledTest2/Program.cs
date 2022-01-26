@@ -1,9 +1,7 @@
-using System;
 using System.Device.I2c;
 using System.Diagnostics;
 using System.Threading;
 using Iot.Device.Ssd13xx;
-using Iot.Device.Ssd13xx.Commands;
 using nanoFramework.Hardware.Esp32;
 
 namespace OledTest2
@@ -16,31 +14,14 @@ namespace OledTest2
             Configuration.SetPinFunction(21, DeviceFunction.I2C1_DATA);
             Configuration.SetPinFunction(22, DeviceFunction.I2C1_CLOCK);
 
-            // var testDev = I2cDevice.Create(new I2cConnectionSettings(1, 0x5C, I2cBusSpeed.StandardMode));
-            // var writeRes = testDev.WriteByte(0);
-            //
-            // while (writeRes.Status != I2cTransferStatus.FullTransfer)
-            // {
-            //     Debug.Write($"\rFailure to communicate. Code: {writeRes.Status}");
-            //     writeRes = testDev.WriteByte(0);
-            //     Thread.Sleep(100);
-            // }
-            //
-            // Debug.WriteLine("Success!");
-
-            // Configuration.SetPinFunction(25, DeviceFunction.I2C2_DATA);
-            // Configuration.SetPinFunction(26, DeviceFunction.I2C2_CLOCK);
-
-            // using var display =
-            //     new Ssd1306(I2cDevice.Create(new I2cConnectionSettings(1, Ssd1306.DefaultI2cAddress)),
-            //         Ssd13xx.DisplayResolution.OLED128x64);
-            // display.ClearScreen();
-            // display.Font = new BasicFont();
-            // display.DrawString(2, 2, "nF IOT!", 2); //large size 2 font
-            // display.DrawString(2, 32, "nanoFramework", 1, true); //centered text
-            // display.Display();
-
-            // Debug.WriteLine("Done");
+            using var display =
+                new Ssd1306(I2cDevice.Create(new I2cConnectionSettings(1, Ssd1306.DefaultI2cAddress, I2cBusSpeed.StandardMode)),
+                    Ssd13xx.DisplayResolution.OLED128x64);
+            display.ClearScreen();
+            display.Font = new BasicFont();
+            display.DrawString(2, 2, "nF IOT!", 2); //large size 2 font
+            display.DrawString(2, 32, "nanoFramework", 1, true); //centered text
+            display.Display();
 
             var sensor = new AM2320();
             sensor.Initialize(new I2cConnectionSettings(1, AM2320.AM2320Addr, I2cBusSpeed.StandardMode));
@@ -48,14 +29,14 @@ namespace OledTest2
             var i = 0;
             while (true)
             {
-                var data = sensor.Read();
-                // // display.ClearScreen();
-                // // display.DrawString(2, 2, $"Temp: {test.Temperature}");
-                // // display.Display();
-                //
+                var data = sensor.ReadTempHum();
+                display.ClearScreen();
+                // ReSharper disable twice SimplifyStringInterpolation Unsupported
+                display.DrawString(2, 2, $"Temp: {data.Temperature.ToString("F")}*C");
+                display.DrawString(2, 20, $"Hum: {data.Humidity.ToString("F")}%");
+                display.Display();
                 Debug.WriteLine($"Reading {i}... temp: {data.Temperature} hum: {data.Humidity}");
 
-                // Debug.WriteLine($"Reading {i}... temp: {sensor.ReadTemp()}");
                 Thread.Sleep(4000);
                 i++;
             }
