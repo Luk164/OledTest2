@@ -13,6 +13,9 @@
 Each line represents a single successful read, separated to eight numbers each representing a byte.
 
 3 4 1 162 0 205 144 99
+
 3 4 1 162 0 218 208 109
+
 3 4 1 160 0 218 113 173
+
 3 4 1 159 0 218 65 161
