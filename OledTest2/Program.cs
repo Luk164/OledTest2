@@ -48,14 +48,14 @@ namespace OledTest2
             var i = 0;
             while (true)
             {
-                // var data = sensor.Read();
+                var data = sensor.Read();
                 // // display.ClearScreen();
                 // // display.DrawString(2, 2, $"Temp: {test.Temperature}");
                 // // display.Display();
                 //
-                // Debug.WriteLine($"Reading {i}... temp: {data.Temperature} hum: {data.Humidity}");
+                Debug.WriteLine($"Reading {i}... temp: {data.Temperature} hum: {data.Humidity}");
 
-                Debug.WriteLine($"Reading {i}... temp: {sensor.ReadTemp()}");
+                // Debug.WriteLine($"Reading {i}... temp: {sensor.ReadTemp()}");
                 Thread.Sleep(4000);
                 i++;
             }

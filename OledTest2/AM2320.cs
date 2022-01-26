@@ -42,9 +42,9 @@ namespace OledTest2
             var readResult = _sensor.Read(readBuf);
 
             // double rawH = BitConverter.ToInt16(readBuf, 2);
-            double rawT = readBuf[2] << 8 + readBuf[3];
+            double rawH = (readBuf[2] << 8) + readBuf[3];
             // double rawT = BitConverter.ToInt16(readBuf, 4);
-            double rawH = readBuf[4] << 8 + readBuf[5];
+            double rawT = (readBuf[4] << 8) + readBuf[5];
 
             // Debug.WriteLine($"Ping result: {test.Status}");
             // Debug.WriteLine($"Write: {writeResult.Status}");
@@ -72,13 +72,13 @@ namespace OledTest2
             var writeResult = _sensor.Write(new byte[] { 0x03, 0x02, 0x02 });
             Thread.Sleep(2);
             var readResult = _sensor.Read(readBuf);
-            double rawH = (readBuf[2] << 8 + readBuf[3]) / 10.0;
+            double temp = ((readBuf[2] << 8) + readBuf[3]) / 10.0;
 
             // Debug.WriteLine($"Ping result: {test.Status}");
             // Debug.WriteLine($"Write: {writeResult.Status}");
             // Debug.WriteLine($"Read: {readResult.Status}");
 
-            return rawH;
+            return temp;
         }
 
         public I2cDevice GetDevice()
