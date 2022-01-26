@@ -51,7 +51,7 @@ namespace OledTest2
         /// <summary>
         /// The font definition.
         /// </summary>
-        private static readonly byte[][] _fontTable =
+        private static readonly byte[][] FontTable =
         {
             new byte [] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},   // U+0020 (space)
             new byte [] { 0x18, 0x3C, 0x3C, 0x18, 0x18, 0x00, 0x18, 0x00},   // U+0021 (!)
@@ -177,11 +177,11 @@ namespace OledTest2
                 var index = (byte)character;
                 if (index is < 32 or > 127)
                 {
-                    return _fontTable[0x20];
+                    return FontTable[0x20];
                 }
                 else
                 {
-                    return _fontTable[index - 0x20];
+                    return FontTable[index - 0x20];
                 }
             }
         }
