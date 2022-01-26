@@ -1,9 +1,7 @@
-using System;
 using System.Device.I2c;
 using System.Diagnostics;
 using System.Threading;
 using Iot.Device.Ssd13xx;
-using Iot.Device.Ssd13xx.Commands;
 using nanoFramework.Hardware.Esp32;
 
 namespace OledTest2
@@ -16,16 +14,32 @@ namespace OledTest2
             Configuration.SetPinFunction(21, DeviceFunction.I2C1_DATA);
             Configuration.SetPinFunction(22, DeviceFunction.I2C1_CLOCK);
 
-            using Ssd1306 device =
-                new Ssd1306(I2cDevice.Create(new I2cConnectionSettings(1, Ssd1306.DefaultI2cAddress)),
+            using var display =
+                new Ssd1306(I2cDevice.Create(new I2cConnectionSettings(1, Ssd1306.DefaultI2cAddress, I2cBusSpeed.StandardMode)),
                     Ssd13xx.DisplayResolution.OLED128x64);
-            device.ClearScreen();
-            device.Font = new BasicFont();
-            device.DrawString(2, 2, "nF IOT!", 2); //large size 2 font
-            device.DrawString(2, 32, "nanoFramework", 1, true); //centered text
-            device.Display();
+            display.ClearScreen();
+            display.Font = new BasicFont();
+            display.DrawString(2, 2, "nF IOT!", 2); //large size 2 font
+            display.DrawString(2, 32, "nanoFramework", 1, true); //centered text
+            display.Display();
 
+            var sensor = new AM2320();
+            sensor.Initialize(new I2cConnectionSettings(1, AM2320.AM2320Addr, I2cBusSpeed.StandardMode));
 
+            var i = 0;
+            while (true)
+            {
+                var data = sensor.ReadTempHum();
+                display.ClearScreen();
+                // ReSharper disable twice SimplifyStringInterpolation Unsupported
+                display.DrawString(2, 2, $"Temp: {data.Temperature.ToString("F")}*C");
+                display.DrawString(2, 20, $"Hum: {data.Humidity.ToString("F")}%");
+                display.Display();
+                Debug.WriteLine($"Reading {i}... temp: {data.Temperature} hum: {data.Humidity}");
+
+                Thread.Sleep(4000);
+                i++;
+            }
         }
     }
 
