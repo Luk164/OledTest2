@@ -16,7 +16,7 @@ namespace OledTest2
             Configuration.SetPinFunction(21, DeviceFunction.I2C1_DATA);
             Configuration.SetPinFunction(22, DeviceFunction.I2C1_CLOCK);
 
-            // var testDev = I2cDevice.Create(new I2cConnectionSettings(1, 0x5C));
+            // var testDev = I2cDevice.Create(new I2cConnectionSettings(1, 0x5C, I2cBusSpeed.StandardMode));
             // var writeRes = testDev.WriteByte(0);
             //
             // while (writeRes.Status != I2cTransferStatus.FullTransfer)
@@ -40,10 +40,10 @@ namespace OledTest2
             // display.DrawString(2, 32, "nanoFramework", 1, true); //centered text
             // display.Display();
 
-            Debug.WriteLine("Done");
+            // Debug.WriteLine("Done");
 
             var sensor = new AM2320();
-            sensor.Initialize(new I2cConnectionSettings(1, AM2320.AM2320Addr));
+            sensor.Initialize(new I2cConnectionSettings(1, AM2320.AM2320Addr, I2cBusSpeed.StandardMode));
 
             var i = 0;
             while (true)
@@ -52,6 +52,7 @@ namespace OledTest2
                 // display.ClearScreen();
                 // display.DrawString(2, 2, $"Temp: {test.Temperature}");
                 // display.Display();
+
                 Debug.WriteLine($"Reading {i}... temp: {data.Temperature} hum: {data.Humidity}");
                 Thread.Sleep(4000);
                 i++;
