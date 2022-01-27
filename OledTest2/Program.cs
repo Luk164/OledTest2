@@ -1,7 +1,11 @@
+using System;
+using System.Device.Gpio;
 using System.Device.I2c;
 using System.Diagnostics;
 using System.Threading;
+using Iot.Device.Button;
 using Iot.Device.Ssd13xx;
+using Iot.Device.Ssd13xx.Commands;
 using nanoFramework.Hardware.Esp32;
 
 namespace OledTest2
@@ -15,29 +19,66 @@ namespace OledTest2
             Configuration.SetPinFunction(22, DeviceFunction.I2C1_CLOCK);
 
             using var display =
-                new Ssd1306(I2cDevice.Create(new I2cConnectionSettings(1, Ssd1306.DefaultI2cAddress, I2cBusSpeed.StandardMode)),
+                new Ssd1306(
+                    I2cDevice.Create(new I2cConnectionSettings(1, Ssd1306.DefaultI2cAddress, I2cBusSpeed.StandardMode)),
                     Ssd13xx.DisplayResolution.OLED128x64);
             display.ClearScreen();
             display.Font = new BasicFont();
             display.DrawString(2, 2, "nF IOT!", 2); //large size 2 font
             display.DrawString(2, 32, "nanoFramework", 1, true); //centered text
             display.Display();
+            Thread.Sleep(1500);
+
+            var displayOn = true;
+            var displayRestart = false;
+
+            var button = new GpioButton(4, pinMode:PinMode.InputPullDown);
+            button.Press += (sender, args) =>
+            {
+                displayOn = !displayOn;
+
+                //Turn off command works, turn on does not
+                if (displayOn == false)
+                {
+                    Debug.WriteLine("Turning display off");
+                    display.ClearScreen();
+                }
+                else
+                {
+                    display.Write(2, 2, "Loading...");
+                    displayRestart = true;
+                    display.Display();
+                    Debug.WriteLine("Turning display on");
+                }
+
+                Debug.WriteLine("Button press");
+            };
 
             var sensor = new AM2320();
             sensor.Initialize(new I2cConnectionSettings(1, AM2320.AM2320Addr, I2cBusSpeed.StandardMode));
+            display.ClearScreen();
 
             var i = 0;
             while (true)
             {
                 var data = sensor.ReadTempHum();
-                display.ClearScreen();
-                // ReSharper disable twice SimplifyStringInterpolation Unsupported
-                display.DrawString(2, 2, $"Temp: {data.Temperature.ToString("F")}*C");
-                display.DrawString(2, 20, $"Hum: {data.Humidity.ToString("F")}%");
-                display.Display();
-                Debug.WriteLine($"Reading {i}... temp: {data.Temperature} hum: {data.Humidity}");
 
-                Thread.Sleep(4000);
+                if (displayOn)
+                {
+                    if (displayRestart)
+                    {
+                        display.ClearScreen();
+                        displayRestart = false;
+                    }
+                    // ReSharper disable twice SimplifyStringInterpolation Unsupported
+                    display.DrawString(0, 0, $"T:{data.Temperature.ToString("F")}C", 2);
+                    display.DrawString(0, 20, $"H:{data.Humidity.ToString("F")}%", 2);
+                    display.Display();
+                }
+
+                Debug.WriteLine($"Reading {i}... temp: {data.Temperature.ToString("F")} hum: {data.Humidity.ToString("F")}, display: {displayOn}");
+
+                Thread.Sleep(2000);
                 i++;
             }
         }

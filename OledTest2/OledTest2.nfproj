@@ -23,6 +23,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Iot.Device.Button, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\nanoFramework.Iot.Device.Button.1.0.259\lib\Iot.Device.Button.dll</HintPath>
+      <Private>True</Private>
+      <SpecificVersion>True</SpecificVersion>
+    </Reference>
     <Reference Include="Iot.Device.Ssd13xx, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\packages\nanoFramework.Iot.Device.Ssd13xx.1.0.281\lib\Iot.Device.Ssd13xx.dll</HintPath>
       <Private>True</Private>
@@ -40,6 +45,11 @@
     </Reference>
     <Reference Include="nanoFramework.Runtime.Events, Version=1.9.2.3, Culture=neutral, PublicKeyToken=c07d481e9758c731">
       <HintPath>..\packages\nanoFramework.Runtime.Events.1.9.2\lib\nanoFramework.Runtime.Events.dll</HintPath>
+      <Private>True</Private>
+      <SpecificVersion>True</SpecificVersion>
+    </Reference>
+    <Reference Include="System.Device.Gpio, Version=1.0.2.3, Culture=neutral, PublicKeyToken=c07d481e9758c731">
+      <HintPath>..\packages\nanoFramework.System.Device.Gpio.1.0.2\lib\System.Device.Gpio.dll</HintPath>
       <Private>True</Private>
       <SpecificVersion>True</SpecificVersion>
     </Reference>
